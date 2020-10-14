@@ -10,4 +10,4 @@ cleaned_fifa_data <- data %>%
          -RM, -LWB, -LDM, -CDM, -RDM, -RWB, -LCB, -CB, -RCB, -RB, -`Release Clause`)
 
 #Mission Statement: Finding Player Optimization for different players and teams to see which playing style fits to a
-# certain Fifa player, whether they likes Strong players, fast players, good passing, good dribbling, etc.
+# certain Fifa player, whether they like Strong players, fast players, good passing, good dribbling, etc.
