@@ -29,7 +29,7 @@ ui <- fluidPage(
 server <- function(input, output) {
   output$players <- renderUI({
     player_options <- cleaned_fifa_data %>% 
-      filter(Club == input$team) %>%
+      filter(Club %in% input$team) %>%
       pull(Name)
     selectInput(inputId = "player_options", 
                 label = "Players",
