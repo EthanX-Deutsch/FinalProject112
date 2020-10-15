@@ -22,7 +22,7 @@ ui <- fluidPage(
     inputId = "team",
     label = "Teams",
     choices = unique(cleaned_fifa_data$Club),
-    multiple = TRUE),
+    multiple = FALSE),
   uiOutput("players")
 )
 
