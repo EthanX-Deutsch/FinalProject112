@@ -73,7 +73,7 @@ server <- function(input, output) {
   })
   output$second_goalkeep <- renderUI({
     goalkeep_options2 <- cleaned_fifa_data %>% 
-      filter(Club %in% input$fsecond_team) %>%
+      filter(Club %in% input$second_team) %>%
       filter(Position %in% c("GK")) %>%
       pull(Name)
     selectInput(inputId = "goalkeep_options2", 
