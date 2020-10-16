@@ -17,7 +17,7 @@ cleaned_fifa_data <- data %>%
                      "Newcastle United", "Southampton", "Tottenham Hotspur",
                      "Watford", "West Ham United", "Wolverhampton Wanderers")) %>%
   mutate(hex_pace = ((Acceleration*.45) + (SprintSpeed*.55)),
-         hex_shooting = ((Finishing*.45) + (LongShot*.2) + (Penalties*.05) + (Positioning*.05) + (ShotPower*.2) + (Volleys*.05)),
+         hex_shooting = ((Finishing*.45) + (LongShots*.2) + (Penalties*.05) + (Positioning*.05) + (ShotPower*.2) + (Volleys*.05)),
          hex_passing = ((Crossing*.2) + (Curve*.05) + (FKAccuracy*.05) + (LongPassing*.15) + (ShortPassing*.35) + (Vision*.25)),
          hex_dribbling = ((Agility*.1) + (Balance*.05) + (BallControl*.35) + (Dribbling*.5)),
          hex_defending = ((HeadingAccuracy*.1) + (Interceptions*.2) + (Marking*.3) + (SlidingTackle*.1) + (StandingTackle*.3)),
