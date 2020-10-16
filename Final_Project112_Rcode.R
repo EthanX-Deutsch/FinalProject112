@@ -25,21 +25,60 @@ cleaned_fifa_data <- data %>%
 
 ui <- fluidPage(
   selectInput(
-    inputId = "team",
-    label = "Teams",
+    inputId = "first_team",
+    label = "Choose a Team",
     choices = unique(cleaned_fifa_data$Club),
     multiple = FALSE),
-  uiOutput("players")
+  uiOutput("first_players"),
+  uiOutput("first_goalkeep"),
+  plotOutput("team1"),
+  selectInput(
+    inputId = "second_team",
+    label = "Choose a Team",
+    choices = unique(cleaned_fifa_data$Club),
+    multiple = FALSE),
+  uiOutput("second_players"),
+  uiOutput("second_goalkeep"),
+  plotOutput("team2")
+  
 )
 
 server <- function(input, output) {
-  output$players <- renderUI({
-    player_options <- cleaned_fifa_data %>% 
-      filter(Club %in% input$team) %>%
+  output$first_players <- renderUI({
+    player_options1 <- cleaned_fifa_data %>% 
+      filter(Club %in% input$first_team) %>%
+      filter(Position != "GK") %>%
       pull(Name)
-    selectInput(inputId = "player_options", 
-                label = "Players",
-                choices = player_options)
+    selectInput(inputId = "player_options1", 
+                label = "Choose 10 Players",
+                choices = player_options1)
+  })
+  output$first_goalkeep <- renderUI({
+    goalkeep_options1 <- cleaned_fifa_data %>% 
+      filter(Club %in% input$first_team) %>%
+      filter(Position %in% c("GK")) %>%
+      pull(Name)
+    selectInput(inputId = "goalkeep_options1", 
+                label = "Choose 1 Goalkeeper",
+                choices = goalkeep_options1)
+  })
+  output$second_players <- renderUI({
+    player_options2 <- cleaned_fifa_data %>% 
+      filter(Club %in% input$second_team) %>%
+      filter(Position != "GK") %>%
+      pull(Name)
+    selectInput(inputId = "player_options2", 
+                label = "Choose 10 Players",
+                choices = player_options2)
+  })
+  output$second_goalkeep <- renderUI({
+    goalkeep_options2 <- cleaned_fifa_data %>% 
+      filter(Club %in% input$fsecond_team) %>%
+      filter(Position %in% c("GK")) %>%
+      pull(Name)
+    selectInput(inputId = "goalkeep_options2", 
+                label = "Choose 1 Goalkeeper",
+                choices = goalkeep_options2)
   })
 }
 
