@@ -29,14 +29,14 @@ cleaned_fifa_data <- data %>%
 ui <- fluidPage(
   selectInput(
     inputId = "first_team",
-    label = "Choose a Team",
+    label = "Choose First Team",
     choices = unique(cleaned_fifa_data$Club),
     multiple = FALSE),
   uiOutput("first_players"),
   uiOutput("first_goalkeep"),
   selectInput(
     inputId = "second_team",
-    label = "Choose a Team",
+    label = "Choose Another Team",
     choices = unique(cleaned_fifa_data$Club),
     multiple = FALSE),
   uiOutput("second_players"),
@@ -50,6 +50,7 @@ ui <- fluidPage(
                    Defending = "hex_defending",
                    Physical = "hex_physical",
                    Passing = "hex_passing")),
+  submitButton("Compare Teams"),
   plotOutput("team1"),
   plotOutput("team2")
   
@@ -61,7 +62,7 @@ server <- function(input, output) {
       filter(Club %in% input$first_team) %>%
       filter(Position != "GK") %>%
       pull(Name)
-    selectInput(inputId = "player_options1", 
+    selectInput(inputId = "first_players", 
                 label = "Choose 10 Players",
                 choices = player_options1,
                 multiple = TRUE)
@@ -80,7 +81,7 @@ server <- function(input, output) {
       filter(Club %in% input$second_team) %>%
       filter(Position != "GK") %>%
       pull(Name)
-    selectInput(inputId = "player_options2", 
+    selectInput(inputId = "second_players", 
                 label = "Choose 10 Players",
                 choices = player_options2,
                 multiple = TRUE)
@@ -98,7 +99,7 @@ server <- function(input, output) {
     cleaned_fifa_data %>% 
       filter(Club %in% input$first_team) %>%
       filter(Name %in% input$first_players) %>%
-      ggplot(aes(x = input$first_players, y = input$hex_category, fill = gen_position)) +
+      ggplot(aes(x = input$first_players, y = input$hex_category), fill = gen_position) +
       geom_bar(stat = "identity") +
       geom_hline(aes(yintercept = mean(input$hex_category))) +
       coord_flip() +
@@ -109,7 +110,7 @@ server <- function(input, output) {
     cleaned_fifa_data %>% 
       filter(Club %in% input$second_team) %>%
       filter(Name %in% input$second_players) %>%
-      ggplot(aes(x = input$second_players, y = input$hex_category, fill = gen_position)) +
+      ggplot(aes(x = input$second_players, y = input$hex_category), fill = gen_position) +
       geom_bar(stat = "identity") +
       geom_hline(aes(yintercept = mean(input$hex_category))) +
       coord_flip() +
