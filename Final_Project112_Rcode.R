@@ -21,7 +21,10 @@ cleaned_fifa_data <- data %>%
          hex_passing = ((Crossing*.2) + (Curve*.05) + (FKAccuracy*.05) + (LongPassing*.15) + (ShortPassing*.35) + (Vision*.25)),
          hex_dribbling = ((Agility*.1) + (Balance*.05) + (BallControl*.35) + (Dribbling*.5)),
          hex_defending = ((HeadingAccuracy*.1) + (Interceptions*.2) + (Marking*.3) + (SlidingTackle*.1) + (StandingTackle*.3)),
-         hex_physical = ((Aggression*.2) + (Jumping*.05) + (Stamina*.25) + (Strength*.5)))
+         hex_physical = ((Aggression*.2) + (Jumping*.05) + (Stamina*.25) + (Strength*.5))) %>%
+  mutate(gen_position = ifelse(Position %in% c("ST", "CF", "LF", "RF", "LS", "RS"), "ATT", 
+                               ifelse(Position %in% c("RW", "LW", "LM", "RM", "CM", "AM", "CAM", "CDM", "RAM", "RDM", "LAM", "LDM", "RCM", "LCM"), "MID",
+                               ifelse(Position %in% c("LB", "RB", "LWB", "RWB", "CB", "LCB", "RCB"), "DEF", "GK"))))
 
 ui <- fluidPage(
   selectInput(
@@ -79,6 +82,9 @@ server <- function(input, output) {
     selectInput(inputId = "goalkeep_options2", 
                 label = "Choose 1 Goalkeeper",
                 choices = goalkeep_options2)
+  })
+  output$skill_player_plot <- renderPlot({
+    
   })
 }
 
