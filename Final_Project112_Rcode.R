@@ -36,11 +36,26 @@ ui <- fluidPage(
       inputId = "second_team",
       label = "Choose Another Team",
       choices = unique(cleaned_fifa_data$Club),
-      multiple = FALSE)),
+      multiple = FALSE),
+    tags$head(tags$style(HTML("
+                              .shiny-split-layout > div {
+                                overflow: visible;
+                              }
+                              ")))),
   splitLayout(uiOutput("first_players"),
-              uiOutput("second_players")),
+              uiOutput("second_players"),
+              tags$head(tags$style(HTML("
+                              .shiny-split-layout > div {
+                                overflow: visible;
+                              }
+                              ")))),
   splitLayout(uiOutput("first_goalkeep"),
-              uiOutput("second_goalkeep")),
+              uiOutput("second_goalkeep"),
+              tags$head(tags$style(HTML("
+                              .shiny-split-layout > div {
+                                overflow: visible;
+                              }
+                              ")))),
   selectInput(
     inputId = "hex_category",
     label = "Choose an Attribute",
