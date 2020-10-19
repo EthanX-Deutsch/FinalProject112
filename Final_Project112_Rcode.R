@@ -27,20 +27,20 @@ cleaned_fifa_data <- data %>%
                                ifelse(Position %in% c("LB", "RB", "LWB", "RWB", "CB", "LCB", "RCB"), "DEF", "GK"))))
 
 ui <- fluidPage(
-  selectInput(
+  splitLayout(selectInput(
     inputId = "first_team",
     label = "Choose First Team",
     choices = unique(cleaned_fifa_data$Club),
     multiple = FALSE),
-  uiOutput("first_players"),
-  uiOutput("first_goalkeep"),
-  selectInput(
-    inputId = "second_team",
-    label = "Choose Another Team",
-    choices = unique(cleaned_fifa_data$Club),
-    multiple = FALSE),
-  uiOutput("second_players"),
-  uiOutput("second_goalkeep"),
+    selectInput(
+      inputId = "second_team",
+      label = "Choose Another Team",
+      choices = unique(cleaned_fifa_data$Club),
+      multiple = FALSE)),
+  splitLayout(uiOutput("first_players"),
+              uiOutput("second_players")),
+  splitLayout(uiOutput("first_goalkeep"),
+              uiOutput("second_goalkeep")),
   selectInput(
     inputId = "hex_category",
     label = "Choose an Attribute",
@@ -51,8 +51,9 @@ ui <- fluidPage(
                    Physical = "hex_physical",
                    Passing = "hex_passing")),
   submitButton("Compare Teams"),
-  plotOutput("team1"),
-  plotOutput("team2")
+  splitLayout(plotOutput("team1"),
+  plotOutput("team2"))
+  
   
 )
 
