@@ -70,7 +70,9 @@ ui <- fluidPage(
   submitButton("Compare Teams"),
   splitLayout(
     plotOutput("team1"),
-    plotOutput("team2"))
+    plotOutput("team2")),
+  splitLayout(plotOutput("goalkeep1"),
+              plotOutput("goalkeep2"))
 )
 
 
