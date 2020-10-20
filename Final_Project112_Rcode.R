@@ -74,10 +74,11 @@ ui <- fluidPage(
              `Dribbling Ability`)),
   submitButton("Compare Teams"),
   splitLayout(
+    plotOutput("avg_hexes"),
     plotOutput("team1", hover = "plot_text"),
     plotOutput("team2")),
   splitLayout(tableOutput("goalkeep1"),
-              tableOutput("goalkeep2")),
+              tableOutput("goalkeep2"))
 )
 
 
@@ -120,6 +121,25 @@ server <- function(input, output) {
     selectInput(inputId = "goalkeep_options2", 
                 label = "Choose 1 Goalkeeper",
                 choices = goalkeep_options2)
+  })
+  output$avg_hexes <- renderPlot({
+    cleaned_fifa_data %>%
+      filter(Club %in% c(input$first_team, input$second_team),
+             Name %in% c(input$first_players, input$second_players)) %>%
+      select(`Pace Ability`, 
+             `Shooting Ability`, 
+             `Passing Ability`, 
+             `Defending Ability`, 
+             `Physical Ability`, 
+             `Dribbling Ability`,
+             Club) %>%
+      pivot_longer(cols = -Club, names_to = "Hex Variables", values_to = "Average Stats") %>%
+      group_by(Club, `Hex Variables`) %>%
+      summarise(`True Averages` = mean(`Average Stats`, na.rm = TRUE)) %>%
+      ggplot(aes(x = `True Averages`, y = `Hex Variables`, fill = Club)) +
+      facet_wrap(~Club) +
+      labs(x = "Player Average Stats", y = "Major Skill Categories") +
+      geom_bar(stat = "identity", position = "identity")
   })
   output$team1 <- renderPlot({
     cleaned_fifa_data %>% 
