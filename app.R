@@ -74,8 +74,8 @@ ui <- fluidPage(
              `Defending Ability`, 
              `Physical Ability`, 
              `Dribbling Ability`)), submitButton("Compare Teams")),
-  splitLayout(plotOutput("team1", click = "plot_click1"),
-    plotOutput("team2", click = "plot_click2"))
+  splitLayout(plotOutput("team1"),
+    plotOutput("team2"))
 )
 
 
