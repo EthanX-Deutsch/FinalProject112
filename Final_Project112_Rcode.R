@@ -76,8 +76,8 @@ ui <- fluidPage(
   splitLayout(
     plotOutput("team1", hover = "plot_text"),
     plotOutput("team2")),
-  splitLayout(plotOutput("goalkeep1"),
-              plotOutput("goalkeep2"))
+  splitLayout(tableOutput("goalkeep1"),
+              tableOutput("goalkeep2")),
 )
 
 
@@ -148,6 +148,16 @@ server <- function(input, output) {
       coord_flip() +
       ggthemes::theme_tufte()
   })
-  }
+  output$goalkeep1 <- renderTable({
+    cleaned_fifa_data %>%
+      select(Name, Position, Overall) %>%
+      filter(Name %in% input$goalkeep_options1) 
+  })
+  output$goalkeep2 <- renderTable({
+    cleaned_fifa_data %>%
+      select(Name, Position, Overall) %>%
+      filter(Name %in% input$goalkeep_options2)
+  })
+}
 
 shinyApp(ui = ui, server = server)
