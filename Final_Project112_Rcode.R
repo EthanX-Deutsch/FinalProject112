@@ -74,7 +74,7 @@ ui <- fluidPage(
              `Dribbling Ability`)),
   submitButton("Compare Teams"),
   splitLayout(
-    plotOutput("team1"),
+    plotOutput("team1", hover = "plot_text"),
     plotOutput("team2")),
   splitLayout(tableOutput("goalkeep1"),
               tableOutput("goalkeep2")),
