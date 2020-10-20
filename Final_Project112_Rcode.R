@@ -16,12 +16,12 @@ cleaned_fifa_data <- data %>%
                      "Liverpool", "Manchester City", "Manchester United",
                      "Newcastle United", "Southampton", "Tottenham Hotspur",
                      "Watford", "West Ham United", "Wolverhampton Wanderers")) %>%
-  mutate(hex_pace = ((Acceleration*.45) + (SprintSpeed*.55)),
-         hex_shooting = ((Finishing*.45) + (LongShots*.2) + (Penalties*.05) + (Positioning*.05) + (ShotPower*.2) + (Volleys*.05)),
-         hex_passing = ((Crossing*.2) + (Curve*.05) + (FKAccuracy*.05) + (LongPassing*.15) + (ShortPassing*.35) + (Vision*.25)),
-         hex_dribbling = ((Agility*.1) + (Balance*.05) + (BallControl*.35) + (Dribbling*.5)),
-         hex_defending = ((HeadingAccuracy*.1) + (Interceptions*.2) + (Marking*.3) + (SlidingTackle*.1) + (StandingTackle*.3)),
-         hex_physical = ((Aggression*.2) + (Jumping*.05) + (Stamina*.25) + (Strength*.5))) %>%
+  mutate(`Pace Ability` = ((Acceleration*.45) + (SprintSpeed*.55)),
+         `Shooting Ability` = ((Finishing*.45) + (LongShots*.2) + (Penalties*.05) + (Positioning*.05) + (ShotPower*.2) + (Volleys*.05)),
+         `Passing Ability` = ((Crossing*.2) + (Curve*.05) + (FKAccuracy*.05) + (LongPassing*.15) + (ShortPassing*.35) + (Vision*.25)),
+         `Dribbling Ability` = ((Agility*.1) + (Balance*.05) + (BallControl*.35) + (Dribbling*.5)),
+         `Defending Ability` = ((HeadingAccuracy*.1) + (Interceptions*.2) + (Marking*.3) + (SlidingTackle*.1) + (StandingTackle*.3)),
+         `Physical Ability` = ((Aggression*.2) + (Jumping*.05) + (Stamina*.25) + (Strength*.5))) %>%
   mutate(gen_position = ifelse(Position %in% c("ST", "CF", "LF", "RF", "LS", "RS"), "ATT", 
                                ifelse(Position %in% c("RW", "LW", "LM", "RM", "CM", "AM", "CAM", "CDM", "RAM", "RDM", "LAM", "LDM", "RCM", "LCM"), "MID",
                                ifelse(Position %in% c("LB", "RB", "LWB", "RWB", "CB", "LCB", "RCB"), "DEF", "GK"))))
@@ -66,7 +66,12 @@ ui <- fluidPage(
     inputId = "hex_category",
     label = "Choose an Attribute",
     data = cleaned_fifa_data %>%
-      select(starts_with("hex"))),
+      select(`Pace Ability`, 
+             `Shooting Ability`, 
+             `Passing Ability`, 
+             `Defending Ability`, 
+             `Physical Ability`, 
+             `Dribbling Ability`)),
   submitButton("Compare Teams"),
   splitLayout(
     plotOutput("team1"),
@@ -120,7 +125,7 @@ server <- function(input, output) {
     cleaned_fifa_data %>% 
       filter(Club %in% input$first_team) %>%
       filter(Name %in% input$first_players) %>%
-      ggplot(aes(x = input$first_players, y = !!input$hex_category, fill = gen_position)) +
+      ggplot(aes(x = reorder(input$first_players, gen_position), y = !!input$hex_category, fill = gen_position)) +
       geom_bar(stat = "identity") +
       geom_hline(aes(yintercept = mean(!!input$hex_category))) +
       scale_fill_manual(values = c("ATT" = "royalblue3", "DEF" = "darkorange2", "MID" = "green3")) +
@@ -134,7 +139,7 @@ server <- function(input, output) {
     cleaned_fifa_data %>% 
       filter(Club %in% input$second_team) %>%
       filter(Name %in% input$second_players) %>%
-      ggplot(aes(x = input$second_players, y = !!input$hex_category, fill = gen_position)) +
+      ggplot(aes(x = reorder(input$second_players, gen_position), y = !!input$hex_category, fill = gen_position)) +
       geom_bar(stat = "identity") +
       geom_hline(aes(yintercept = mean(!!input$hex_category))) +
       scale_fill_manual(values = c("ATT" = "royalblue3", "DEF" = "darkorange2", "MID" = "green3")) +
@@ -142,8 +147,7 @@ server <- function(input, output) {
       ylim(0, 100) +
       coord_flip() +
       ggthemes::theme_tufte()
-    
   })
-}
+  }
 
 shinyApp(ui = ui, server = server)
