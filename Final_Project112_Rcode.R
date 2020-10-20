@@ -1,7 +1,6 @@
 library(dplyr)
 library(tidyverse)
 library(shiny)
-library(dygraphs)
 
 data <- read_csv("data.csv")
 
