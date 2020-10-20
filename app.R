@@ -74,9 +74,8 @@ ui <- fluidPage(
              `Defending Ability`, 
              `Physical Ability`, 
              `Dribbling Ability`)), submitButton("Compare Teams")),
-  splitLayout(plotOutput("team1", hover = "plot_text"),
-    plotOutput("team2", hover = "plot_text")),
-  splitLayout()
+  splitLayout(plotOutput("team1", click = "plot_click1"),
+    plotOutput("team2", click = "plot_click2"))
 )
 
 
@@ -136,18 +135,19 @@ server <- function(input, output) {
       summarise(`True Averages` = mean(`Average Stats`, na.rm = TRUE)) %>%
       ggplot(aes(x = `True Averages`, y = `Hex Variables`, fill = Club)) +
       facet_wrap(~Club) +
-      labs(x = "Player Average Stats", y = "Major Skill Categories") +
-      geom_bar(stat = "identity", position = "identity")
+      labs(x = "Team Average", y = "") +
+      geom_bar(stat = "identity", position = "identity") +
+      ggthemes::theme_tufte()
   })
   output$team1 <- renderPlot({
     cleaned_fifa_data %>% 
       filter(Club %in% input$first_team) %>%
       filter(Name %in% input$first_players) %>%
-      ggplot(aes(x = input$first_players, y = !!input$hex_category, fill = gen_position)) +
+      ggplot(aes(x = fct_reorder(input$first_players, gen_position), y = !!input$hex_category, fill = gen_position)) +
       geom_bar(stat = "identity") +
       geom_hline(aes(yintercept = mean(!!input$hex_category))) +
       scale_fill_manual(values = c("ATT" = "royalblue3", "DEF" = "darkorange2", "MID" = "green3")) +
-      labs(x = "Player", y = "Score", fill = "Position") +
+      labs(title = "Individual Player Ability of First Team", x = "", y = "", fill = "Position") +
       ylim(0, 100) +
       coord_flip() +
       ggthemes::theme_tufte()
@@ -157,11 +157,11 @@ server <- function(input, output) {
     cleaned_fifa_data %>% 
       filter(Club %in% input$second_team) %>%
       filter(Name %in% input$second_players) %>%
-      ggplot(aes(x = input$second_players, y = !!input$hex_category, fill = gen_position)) +
+      ggplot(aes(x = fct_reorder(input$second_players, gen_position), y = !!input$hex_category, fill = gen_position)) +
       geom_bar(stat = "identity") +
       geom_hline(aes(yintercept = mean(!!input$hex_category))) +
       scale_fill_manual(values = c("ATT" = "royalblue3", "DEF" = "darkorange2", "MID" = "green3")) +
-      labs(x = "Player", y = "Score", fill = "Position") +
+      labs(title = "Individual Player Ability of Secon Team", x = "", y = "", fill = "Position") +
       ylim(0, 100) +
       coord_flip() +
       ggthemes::theme_tufte()
