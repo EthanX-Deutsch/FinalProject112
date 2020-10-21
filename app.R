@@ -168,7 +168,7 @@ server <- function(input, output) {
       geom_bar(stat = "identity") +
       geom_hline(aes(yintercept = mean(!!input$hex_category))) +
       scale_fill_manual(values = c("ATT" = "royalblue3", "DEF" = "darkorange2", "MID" = "green3")) +
-      labs(title = "Individual Player Ability of Secon Team", x = "", y = "", fill = "Position") +
+      labs(title = "Individual Player Ability of Second Team", x = "", y = "", fill = "Position") +
       ylim(0, 100) +
       coord_flip() +
       ggthemes::theme_tufte()
