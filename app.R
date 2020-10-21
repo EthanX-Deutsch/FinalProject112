@@ -142,7 +142,7 @@ server <- function(input, output) {
       geom_vline(xintercept = 0) +
       scale_x_continuous(breaks = seq(-100, 100, 25),
                          labels = abs(seq(-100, 100, 25))) +
-      geom_text(aes(x = `True Averages`, label = abs(round(`True Averages`, digits = 1)), position = "stack")) +
+      geom_text(aes(x = `True Averages` * .5, label = abs(round(`True Averages`, digits = 0)), position = "stack"), color = "white") +
       scale_fill_manual(values = c("Arsenal" = "red2", "Liverpool" = "orangered3", "Manchester City" = "darkslategray3",
                                    "Tottenham Hotspur" = "navyblue", "Chelsea" = "royalblue2", "Everton" = "royalblue4",
                                    "Manchester United" = "firebrick2", "Bournemouth" = "firebrick", "Watford" = "yellow1", 
@@ -159,6 +159,7 @@ server <- function(input, output) {
       ggplot(aes(x = fct_reorder(input$first_players, gen_position), y = !!input$hex_category, fill = gen_position)) +
       geom_bar(stat = "identity") +
       geom_hline(aes(yintercept = mean(!!input$hex_category))) +
+      geom_text(aes(y = !!input$hex_category * .5, label = round(!!input$hex_category, digits = 0), position = "stack"), color = "white") +
       scale_fill_manual(values = c("ATT" = "royalblue3", "DEF" = "darkorange2", "MID" = "green3")) +
       labs(title = "Individual Player Ability of First Team", x = "", y = "", fill = "Position") +
       ylim(0, 100) +
@@ -173,6 +174,7 @@ server <- function(input, output) {
       ggplot(aes(x = fct_reorder(input$second_players, gen_position), y = !!input$hex_category, fill = gen_position)) +
       geom_bar(stat = "identity") +
       geom_hline(aes(yintercept = mean(!!input$hex_category))) +
+      geom_text(aes(y = !!input$hex_category * .5, label = round(!!input$hex_category, digits = 0), position = "stack"), color = "white") +
       scale_fill_manual(values = c("ATT" = "royalblue3", "DEF" = "darkorange2", "MID" = "green3")) +
       labs(title = "Individual Player Ability of Second Team", x = "", y = "", fill = "Position") +
       ylim(0, 100) +
