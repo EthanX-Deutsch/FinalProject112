@@ -26,7 +26,9 @@ cleaned_fifa_data <- data %>%
                                ifelse(Position %in% c("RW", "LW", "LM", "RM", "CM", "AM", "CAM", "CDM", "RAM", "RDM", "LAM", "LDM", "RCM", "LCM"), "MID",
                                ifelse(Position %in% c("LB", "RB", "LWB", "RWB", "CB", "LCB", "RCB"), "DEF", "GK"))))
 
-ui <- fluidPage(
+ui <- fluidPage(column(width = 12, strong("Play to Win")),
+                column(width = 12, "Compare and Optimize FIFA 19 Premier League Teams"),
+                column(width = 12, "Created by Emma Iverson, Ethan Deutsch, Johanna Caskey, & Phebe Chen"),
   splitLayout(selectInput(
     inputId = "first_team",
     label = "Choose First Team",
