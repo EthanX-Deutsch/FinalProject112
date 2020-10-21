@@ -47,7 +47,7 @@ ui <- fluidPage(verticalLayout(strong("Play to Win"),
                                 overflow: visible;
                               }
                               ")))),
-  submitButton("Select Team"),
+  submitButton("Select Teams"),
   splitLayout(uiOutput("first_players"),
               uiOutput("second_players"),
               tags$head(tags$style(HTML("
@@ -135,11 +135,14 @@ server <- function(input, output) {
       pivot_longer(cols = -Club, names_to = "Hex Variables", values_to = "Average Stats") %>%
       group_by(Club, `Hex Variables`) %>%
       summarise(`True Averages` = mean(`Average Stats`, na.rm = TRUE)) %>%
+      mutate(`True Averages` = ifelse(Club %in% input$second_team, -`True Averages`, `True Averages`)) %>%
       ggplot(aes(x = `True Averages`, y = `Hex Variables`, fill = Club)) +
-      facet_wrap(~Club) +
-      labs(x = "Team Average", y = "") +
+      labs(title = "Team Comparison Overview", x = "Team Average", y = "") +
       geom_bar(stat = "identity", position = "identity") +
-      geom_text(aes(x = `True Averages` + 6, label = round(`True Averages`, digits = 1), position = "stack")) +
+      geom_vline(xintercept = 0) +
+      scale_x_continuous(breaks = seq(-100, 100, 25),
+                         labels = abs(seq(-100, 100, 25))) +
+      geom_text(aes(x = `True Averages`, label = abs(round(`True Averages`, digits = 1)), position = "stack")) +
       scale_fill_manual(values = c("Arsenal" = "red2", "Liverpool" = "orangered3", "Manchester City" = "darkslategray3",
                                    "Tottenham Hotspur" = "navyblue", "Chelsea" = "royalblue2", "Everton" = "royalblue4",
                                    "Manchester United" = "firebrick2", "Bournemouth" = "firebrick", "Watford" = "yellow1", 
