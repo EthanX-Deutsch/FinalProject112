@@ -47,8 +47,7 @@ ui <- fluidPage(verticalLayout(strong("Play to Win"),
                                 overflow: visible;
                               }
                               ")))),
-  splitLayout(submitButton("Select Team"),
-              submitButton("Select Team")),
+  submitButton("Select Team"),
   splitLayout(uiOutput("first_players"),
               uiOutput("second_players"),
               tags$head(tags$style(HTML("
@@ -56,8 +55,7 @@ ui <- fluidPage(verticalLayout(strong("Play to Win"),
                                 overflow: visible;
                               }
                               ")))),
-  splitLayout(submitButton("Select Players"),
-              submitButton("Select Players")),
+  submitButton("Select Players"),
   splitLayout(uiOutput("first_goalkeep"),
               uiOutput("second_goalkeep"),
               tags$head(tags$style(HTML("
@@ -65,8 +63,7 @@ ui <- fluidPage(verticalLayout(strong("Play to Win"),
                                 overflow: visible;
                               }
                               ")))),
-  splitLayout(submitButton("Select Goalkeeper"),
-              submitButton("Select Goalkeeper")),
+  submitButton("Select Goalkeeper"),
   splitLayout(verticalLayout(tableOutput("goalkeep1"),
                              tableOutput("goalkeep2")), plotOutput("avg_hexes")),
   splitLayout(varSelectInput(
@@ -142,12 +139,13 @@ server <- function(input, output) {
       facet_wrap(~Club) +
       labs(x = "Team Average", y = "") +
       geom_bar(stat = "identity", position = "identity") +
+      geom_text(aes(x = `True Averages` + 6, label = round(`True Averages`, digits = 1), position = "stack")) +
       scale_fill_manual(values = c("Arsenal" = "red2", "Liverpool" = "orangered3", "Manchester City" = "darkslategray3",
                                    "Tottenham Hotspur" = "navyblue", "Chelsea" = "royalblue2", "Everton" = "royalblue4",
-                                   "Manchester United" = "firebrick2", "Bournemouth" = "black", "Watford" = "yellow1", 
+                                   "Manchester United" = "firebrick2", "Bournemouth" = "firebrick", "Watford" = "yellow1", 
                                    "Leicester City" = "cornflowerblue", "Wolverhampton Wanderers" = "gold",
                                    "Brighton & Hove Albion" = "gray82", "Newcastle United" = "gray30", "West Ham United" = "maroon",
-                                   "Fulham" = "firebrick", "Huddersfield Town" = "turquoise3", "Cardiff City" = "gray92", 
+                                   "Fulham" = "black", "Huddersfield Town" = "turquoise3", "Cardiff City" = "gray92", 
                                    "Crystal Palace" = "royalblue3", "Southampton" = "red", "Burnley" = "seagreen4")) +
       ggthemes::theme_tufte()
   })
@@ -191,3 +189,4 @@ server <- function(input, output) {
 }
 
 shinyApp(ui = ui, server = server)
+
